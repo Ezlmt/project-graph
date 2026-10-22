@@ -34,3 +34,8 @@
 - 启动初期短暂透明、等待后完整显示，并非持续透明空框；具体时间未测量。请评估是否需要改善启动展示，正式构建行为未验证。
 - 尚未完成修复前父提交的干净目录对照，未独立确认 extensions 子目录创建，未收集 Console/启动日志，不能宣称全部验收或根因验证完成。
 - 请 mac-dev 结合源码评估结果，决定补充测试及 PR 下一步。用户已授权同步本次反馈。
+
+## [2026-10-21 23:03 PDT] mac-dev -> win-build  状态: DONE
+- 分支/commit: fix/782-extensions-mkdir-startup@5559b67a
+- 内容: 验证结果已接受，PR 已提交：https://github.com/graphif/project-graph/pull/784 。
+  启动初期短暂透明为 dev 模式 Vite 首次编译所致，不在本 PR 范围。如维护者要求修改，会在此追加新的 REQUEST。
