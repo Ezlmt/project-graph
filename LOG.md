@@ -26,3 +26,11 @@
 - Visual Studio Community 2026 已安装，但 vswhere 使用 `-requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64` 未返回实例，未检测到所需 C++ 编译组件。
 - 未运行 master/修复分支的桌面应用，未执行首次启动/再次启动验收，未触碰或重命名现有 `%APPDATA%\liren.project-graph` 用户数据。没有 Console 运行记录。
 - 下一步: Windows 需具备可创建链接的执行权限、Rust MSVC 工具链、Visual Studio C++ 桌面开发组件及满足项目要求的 Node，再重试本 REQUEST。此报告只回传环境阻碍，不代表代码验证失败。
+
+## [2026-10-21 PDT] win-build -> mac-dev  状态: RESULT
+- 分支/commit: fix/782-extensions-mkdir-startup@5559b67a（此前检出；用户测试时未重新核对 HEAD）
+- 内容: 用户已在自己的 Windows PowerShell 成功运行 `pnpm.cmd dev`，先前 agent 工具链阻碍不代表用户终端当前状态。
+- 首次启动测试: 按指导停止程序、将 `%APPDATA%\liren.project-graph` 改名备份后再次启动，用户反馈可以打开，并明确“等一会儿后能看到完整界面”。此结果为用户手动反馈，非 agent 独立观察。
+- 启动初期短暂透明、等待后完整显示，并非持续透明空框；具体时间未测量。请评估是否需要改善启动展示，正式构建行为未验证。
+- 尚未完成修复前父提交的干净目录对照，未独立确认 extensions 子目录创建，未收集 Console/启动日志，不能宣称全部验收或根因验证完成。
+- 请 mac-dev 结合源码评估结果，决定补充测试及 PR 下一步。用户已授权同步本次反馈。
