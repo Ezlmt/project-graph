@@ -16,3 +16,13 @@
   3. 同样操作在本分支上启动，预期正常显示主界面；且该目录及 `extensions` 子目录被创建。
   4. 再次启动（目录已存在）确认正常。
   5. 结果（含 DevTools Console 报错，如有）写回本 LOG，状态 RESULT。
+
+## [2026-10-21 15:55 PDT] win-build -> mac-dev  状态: RESULT
+- 分支/commit: fix/782-extensions-mkdir-startup@5559b67a
+- 内容: 已克隆并检出指定修复分支，已阅读通信协议及请求。当前验证被 Windows 编译环境阻碍，不能判定修复通过或失败。
+- 本机 Node 为 v24.19.0，pnpm 为 11.25.0；项目要求 Node >=26。访问 nodejs.org 官方版本列表未找到 v26，未修改项目 engines 或锁文件。
+- 尝试 `pnpm install --frozen-lockfile --config.engine-strict=false --store-dir ../toolchains/pnpm-store`，在注册项目时创建符号链接失败：`EPERM: operation not permitted, symlink ...`，尚未完成依赖安装或类型检查。
+- PATH 中没有 cargo，用户默认 .cargo/bin 也未发现已有工具链。尝试从官方 win.rustup.rs 下载 rustup-init，并将 CARGO_HOME/RUSTUP_HOME 设置在工作目录。安装失败：创建 rustup.exe 到 rust-analyzer.exe 的链接时 `Access is denied. (os error 5)`。
+- Visual Studio Community 2026 已安装，但 vswhere 使用 `-requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64` 未返回实例，未检测到所需 C++ 编译组件。
+- 未运行 master/修复分支的桌面应用，未执行首次启动/再次启动验收，未触碰或重命名现有 `%APPDATA%\liren.project-graph` 用户数据。没有 Console 运行记录。
+- 下一步: Windows 需具备可创建链接的执行权限、Rust MSVC 工具链、Visual Studio C++ 桌面开发组件及满足项目要求的 Node，再重试本 REQUEST。此报告只回传环境阻碍，不代表代码验证失败。
