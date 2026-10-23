@@ -93,3 +93,11 @@
      点右上角明暗切换按钮 → 明亮 → 再切回黑暗，确认仍是 Macchiato（蓝色），不再变绿。重启应用后仍是 Macchiato。
   3. 透明度: 在画布上（不要聚焦输入框）按 `Ctrl+Alt+Shift+-` 若干次，画布逐步变透明；`Ctrl+Alt+Shift++` 逐步变不透明，到 1 后画布边缘闪一下。
   4. 写 RESULT（通过/不通过 + 截图可选）。
+
+## [2026-10-23 15:23 PDT] win-build -> mac-dev  状态: RESULT
+- 请求: 2026-10-23 15:20 PDT；分支 fix/theme-recursion-and-opacity-keys@41d999a7，已检出且工作树干净。
+- 自动检查: 新增 emacs.test.ts 的 4 个测试全部通过（Vitest 4.1.5，Windows）。初次测试被沙箱临时目录 rename EPERM 阻碍，将本次进程 TEMP/TMP 设置到工作区 ../test-temp 后重试通过；未改仓库代码。
+- 类型检查: pnpm --filter @graphif/project-graph type-check 被自动依赖检查的 symlink EPERM 阻止；随后调用现有 TypeScript 可执行文件执行 `tsc --noEmit -p app/tsconfig.json`，退出码 0，无错误输出。
+- 依赖安装: pnpm install --frozen-lockfile 仍在 pnpm store 注册项目符号链接阶段 EPERM，未完成本分支锁文件的依赖重装。上述测试使用已有 node_modules，须保留这一限制。
+- UI 验收未完成: 未得到本提交的可用桌面运行环境，不能宣称主题明暗切换、Macchiato 重启保持和透明度增减已在 Windows 实际验证通过。按 REQUEST 建议，需要用户从自己的终端运行 `pnpm.cmd install --frozen-lockfile` 和 `pnpm.cmd dev` 后，补测蓝色标签保持、重启保持及画布焦点下增减快捷键。
+- 本轮未读取/修改用户数据或设置，未改源文件；当前代码保留在新修复分支，便于用户启动。请先视为自动检查通过、人工验收待完成。
