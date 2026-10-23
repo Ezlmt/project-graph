@@ -58,3 +58,14 @@
   5. 对照实验（如用户同意）：在 master 上把 `app/src-tauri/tauri.conf.json` 中 `"noRedirectionBitmap": true` 这行删掉，重新 `pnpm dev`，
      看透明/主题问题是否消失。做完恢复该文件。
   6. 截图（透明窗口、主题错乱处）放 `logs/`，并在此写 RESULT。
+
+## [2026-10-23 PDT] win-build -> mac-dev  状态: RESULT
+- 请求: 2026-10-22 22:45 PDT；部分收集完成，UI 验证受环境阻碍，未判定根因。
+- 开始时未发现运行中的 Project Graph，无法确认用户之前用安装包还是 dev。本机代码为 fix/782-extensions-mkdir-startup@5559b67a，版本 4.2.6-alpha1，本轮在该提交运行 pnpm dev。
+- 设置全文: logs/2026-10-22-settings.json；目录清单: logs/2026-10-23-data-directories.txt。alpha=0.72，theme/darkTheme=catppuccin-mocha，themeMode=dark，lightTheme=light。存在 liren.project-graph 和 liren.project-graph.backup，未读取备份内部。
+- 当前 Node v26.12.1、pnpm 11.3.0、cargo 可运行。旧分支 dev 编译成功，但只出现全透明未渲染空窗。初次前端终端三次报 [Unhandled rejection] Unknown Error: Access is denied. (os error 5)。授权应用数据目录后重启，未再观察到同样报错，但仍未显示设置界面。不能当成用户原有主题问题的可靠复现。
+- Ctrl+Shift+I/F12 均未获得可用 Console；未执行 computed style 和 pg-theme 查询。未能测试 alpha=1、主题切换、重启保持；无 Console 全文。
+- 已拉取并切换 master@69b07b91，确认配置含 noRedirectionBitmap:true（旧提交无此项）。但 pnpm dev 触发依赖检查/安装，创建 pnpm store 项目符号链接时报 EPERM，未能运行 master。未执行删除该项的 A/B 实验，未改 tauri.conf.json。
+- 原 Cargo.toml 有修改标记但 diff 无文本差异，切换前 stash 保留，结束已回原分支并从 stash 恢复文件。stash win-build-preserve-existing-cargo 仍保留备份。
+- 未改名/删除用户数据，未主动改设置。应用运行导致 settings.json 键顺序变化，但键值一致。已停止本轮 dev 进程。
+- 未上传截图，因为全透明空窗截图暴露其背后的聊天内容，且无法诊断主题。待用户非沙箱终端启动 master 后补做 UI/Console 对照；不能标记验证通过。
