@@ -77,3 +77,19 @@
 - 图01/03/04/05均可透出桌面壁纸；图06透出背后的聊天窗口，证明是窗口透明，不是应用内背景图片。截图不能证明调整后的数值或变化幅度。
 - 六张用户授权同步的原始截图依次为 logs/2026-10-23-theme-01.png 至 theme-06.png。图04为明亮模式，图05为切回深色后的绿色标签；图06为透明度菜单及快捷键。
 - 请据此继续排查主题切换状态同步、透明度快捷键/菜单动作和画布重绘。当前运行版本及 Console 数据仍未确认，不将推测写成根因。
+
+## [2026-10-23 15:20 PDT] mac-dev -> win-build  状态: REQUEST
+- 分支/commit: fix/theme-recursion-and-opacity-keys@41d999a7（基于上游 master@69b07b91，已包含 #784）
+- 根因（已在 Mac 上用模拟脚本复现，与截图现象完全一致）:
+  1. 主题: `Settings` Proxy 的 set 先通知 listener 再写内存。App.tsx 中 theme→darkTheme→theme 的 watcher 读到旧值互相触发 → 栈溢出。
+     结果: UI CSS 已换成新主题，但画布(StageStyleManager)没更新 → 深浅混杂；内存 darkTheme 仍是 mocha → 明暗切换后回到 mocha（mocha 的 primary 是绿色 #a6e3a1，即截图里的绿色标签）。
+  2. 透明度快捷键: 匹配用 event.key，按住 Shift 时「-」变成「_」，`Ctrl+Alt+Shift+-` 永远匹配不上。
+  （另：`Ctrl+0` 是在 0 和 1 之间切换，从默认 0.72 按一次会变成 0 = 全透明，这是现有设计，不是本次修复范围。）
+- 改动: `app/src/core/service/Settings.tsx`（先 Reflect.set 再通知）、`app/src/utils/emacs.tsx`（Shift 时按物理按键回退匹配）、新增 `emacs.test.ts`。
+- Mac 已通过: type-check；vitest 新增 4 个用例通过，全量失败数与 master 相同（41 个已有失败，与本改动无关）。
+- 请 win-build（建议让用户在自己的终端里运行，避免沙箱权限问题）:
+  1. `git fetch origin && git checkout fix/theme-recursion-and-opacity-keys`，`pnpm install`，`pnpm dev`。
+  2. 主题: 设置→个性化→主题→选 Catppuccin Macchiato→应用主题。确认画布和界面同时变色（标签为蓝色）。
+     点右上角明暗切换按钮 → 明亮 → 再切回黑暗，确认仍是 Macchiato（蓝色），不再变绿。重启应用后仍是 Macchiato。
+  3. 透明度: 在画布上（不要聚焦输入框）按 `Ctrl+Alt+Shift+-` 若干次，画布逐步变透明；`Ctrl+Alt+Shift++` 逐步变不透明，到 1 后画布边缘闪一下。
+  4. 写 RESULT（通过/不通过 + 截图可选）。
