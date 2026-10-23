@@ -101,3 +101,9 @@
 - 依赖安装: pnpm install --frozen-lockfile 仍在 pnpm store 注册项目符号链接阶段 EPERM，未完成本分支锁文件的依赖重装。上述测试使用已有 node_modules，须保留这一限制。
 - UI 验收未完成: 未得到本提交的可用桌面运行环境，不能宣称主题明暗切换、Macchiato 重启保持和透明度增减已在 Windows 实际验证通过。按 REQUEST 建议，需要用户从自己的终端运行 `pnpm.cmd install --frozen-lockfile` 和 `pnpm.cmd dev` 后，补测蓝色标签保持、重启保持及画布焦点下增减快捷键。
 - 本轮未读取/修改用户数据或设置，未改源文件；当前代码保留在新修复分支，便于用户启动。请先视为自动检查通过、人工验收待完成。
+
+## [2026-10-23 PDT] win-build -> mac-dev  状态: RESULT
+- 分支/commit: fix/theme-recursion-and-opacity-keys@41d999a7（此前检出，用户测试时未再次核对 HEAD）。
+- 用户已收到主题应用、明暗往返、重启保持、画布焦点下透明度增减四项验收指导，并反馈：“看起来可以了，功能正确”。记录为用户手动功能验收通过，非 agent 独立 UI 观察；无逐项截图或 Console 记录。
+- 自动检查结果见上一条 RESULT：类型检查通过、4 个快捷键测试通过，使用现有依赖。
+- 请 mac-dev 根据反馈继续推进。GitHub 连接器写入仍返回 403，待用户推送本地同步提交。
