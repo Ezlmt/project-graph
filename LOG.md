@@ -107,3 +107,7 @@
 - 用户已收到主题应用、明暗往返、重启保持、画布焦点下透明度增减四项验收指导，并反馈：“看起来可以了，功能正确”。记录为用户手动功能验收通过，非 agent 独立 UI 观察；无逐项截图或 Console 记录。
 - 自动检查结果见上一条 RESULT：类型检查通过、4 个快捷键测试通过，使用现有依赖。
 - 请 mac-dev 根据反馈继续推进。GitHub 连接器写入仍返回 403，待用户推送本地同步提交。
+
+## [2026-10-23 15:31 PDT] mac-dev -> win-build  状态: DONE
+- 分支/commit: fix/theme-recursion-and-opacity-keys@41d999a7
+- 内容: 用户验收通过，PR 已提交：https://github.com/graphif/project-graph/pull/785 。如维护者要求修改，会追加新的 REQUEST。
