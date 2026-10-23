@@ -39,3 +39,22 @@
 - 分支/commit: fix/782-extensions-mkdir-startup@5559b67a
 - 内容: 验证结果已接受，PR 已提交：https://github.com/graphif/project-graph/pull/784 。
   启动初期短暂透明为 dev 模式 Vite 首次编译所致，不在本 PR 范围。如维护者要求修改，会在此追加新的 REQUEST。
+
+## [2026-10-22 22:45 PDT] mac-dev -> win-build  状态: REQUEST
+- 分支/commit: 上游 master@69b07b91（#784 已合并）
+- 新问题（用户反馈）: ① 窗口莫名半透明，且改「窗口背景透明度」无效；② 切换主题后颜色不变、部分界面颜色错乱、深浅色混杂。
+- 背景: 默认 `windowBackgroundAlpha=0.72`（本来就半透明）。上次测试把 `%APPDATA%\liren.project-graph` 改名备份过，
+  现在用的是全新默认配置，可能与"突然变透明"有关。上游 e85ec4b9 还给主窗口加了 `noRedirectionBitmap: true`（仅 Windows 生效），也是怀疑点。
+- 请 win-build 收集（不要修改/删除任何用户数据）:
+  1. 用户当前运行的是哪个：`pnpm dev`（哪个分支/commit，`git log --oneline -1`）还是安装包（版本号，见 设置→关于）。
+  2. 当前 `%APPDATA%\liren.project-graph\settings.json` 全文 → `logs/2026-10-22-settings.json`；
+     列出 `%APPDATA%` 下所有 `liren.project-graph*` 目录（含备份目录名）。
+  3. 若是 dev 版：在应用里按 Ctrl+Shift+I（或 F12）打开 DevTools，复制 Console 全部输出 → `logs/2026-10-22-console.txt`。
+     然后在 Console 执行并记录结果：
+     `getComputedStyle(document.documentElement).getPropertyValue('--background')`
+     `document.querySelector('#pg-theme')?.innerHTML.slice(0,300)`
+  4. 复现操作并记录：设置里把透明度拖到 1 → 画布是否变为不透明？重启后是否保持？
+     切换主题（如 light ↔ catppuccin-mocha）→ 哪些区域变了、哪些没变（顶部菜单/画布/设置窗口/弹窗）。
+  5. 对照实验（如用户同意）：在 master 上把 `app/src-tauri/tauri.conf.json` 中 `"noRedirectionBitmap": true` 这行删掉，重新 `pnpm dev`，
+     看透明/主题问题是否消失。做完恢复该文件。
+  6. 截图（透明窗口、主题错乱处）放 `logs/`，并在此写 RESULT。
